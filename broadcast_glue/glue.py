@@ -18,7 +18,10 @@ class Glue(server.DatagramServer):
             for addr in netifaces.ifaddresses(interface)[netifaces.AF_INET]:
                 net = '%s/%s' % (addr['addr'], addr['netmask'])
                 net = netaddr.IPNetwork(net)
-                selfie._addr_map.append((net, addr['broadcast']))
+                broadcast = addr.get('boadcast')
+
+                if broadcast:
+                    selfie._addr_map.append((net, broadcast))
 
         selfie._send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
