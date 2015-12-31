@@ -8,7 +8,7 @@ from gevent import socket
 
 
 class Glue(server.DatagramServer):
-    def __init__(selfie, interfaces, port):
+    def __init__(selfie, interfaces, port, peers=None):
         super(Glue, selfie).__init__(':%s' % port)
 
         interfaces = [i for i in netifaces.interfaces() if i in interfaces]
@@ -23,6 +23,10 @@ class Glue(server.DatagramServer):
                 if broadcast:
                     selfie._addr_map.append((net, broadcast))
 
+        if peers:
+            for peer in peers:
+                selfie._addr_map.append((None, peer))
+
         selfie._send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def handle(selfie, data, address):
@@ -30,7 +34,7 @@ class Glue(server.DatagramServer):
         port = address[1]
 
         for net, broadcast in selfie._addr_map:
-            if host in net:
+            if net and host in net:
                 continue
 
             selfie._send_socket.sendto(data, (broadcast, port))

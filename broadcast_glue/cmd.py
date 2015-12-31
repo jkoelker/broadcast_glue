@@ -13,9 +13,11 @@ def main():
                         help='Interfaces to bridge')
     parser.add_argument('-p', '--port', type=int, default=27036,
                         help='Port to listen/broadcast')
+    parser.add_argument('--peer', action='append',
+                        help='IP address of peer to ALWAYS replicate to')
 
     args = parser.parse_args()
-    g = glue.Glue(interfaces=args.interfaces, port=args.port)
+    g = glue.Glue(interfaces=args.interfaces, port=args.port, peers=args.peer)
     g.serve_forever()
 
 
