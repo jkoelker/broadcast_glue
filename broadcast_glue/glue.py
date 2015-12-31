@@ -18,7 +18,7 @@ class Glue(server.DatagramServer):
             for addr in netifaces.ifaddresses(interface)[netifaces.AF_INET]:
                 net = '%s/%s' % (addr['addr'], addr['netmask'])
                 net = netaddr.IPNetwork(net)
-                broadcast = addr.get('boadcast')
+                broadcast = addr.get('broadcast')
 
                 if broadcast:
                     selfie._addr_map.append((net, broadcast))
